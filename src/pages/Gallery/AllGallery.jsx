@@ -15,6 +15,7 @@ import {
   Database,
   CheckCircle2,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 
 /* --- EDIT GALLERY MODAL COMPONENT --- */
@@ -136,104 +137,114 @@ const EditGalleryModal = ({ record, onClose }) => {
   const isUpdating = uploadStep > 0;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#163A2D]/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-[#090e0b]/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
+      
+      {/* Overlay Loader */}
       {isUpdating && (
-        <div className="absolute inset-0 z-[60] bg-white/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
-          <div className="w-16 h-16 bg-[#163A2D] text-amber-300 rounded-full flex items-center justify-center shadow-lg">
+        <div className="absolute inset-0 z-[60] bg-[#0d1410]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+          <div className="w-16 h-16 bg-emerald-950 border border-emerald-500/30 text-amber-400 rounded-full flex items-center justify-center shadow-lg">
             {uploadStep === 1 && <CloudUpload className="w-8 h-8 animate-bounce" />}
             {uploadStep === 2 && <Database className="w-8 h-8 animate-pulse" />}
             {uploadStep === 3 && <CheckCircle2 className="w-8 h-8 text-emerald-400" />}
           </div>
           <div>
-            <h4 className="text-lg font-bold text-[#163A2D]">
+            <h4 className="text-lg font-extrabold text-white">
               {uploadStep === 1 && "Uploading new image..."}
               {uploadStep === 2 && "Saving updates..."}
               {uploadStep === 3 && "Updated Successfully!"}
             </h4>
+            <p className="text-xs text-slate-400 font-medium mt-0.5">Please wait while changes sync.</p>
           </div>
-          <div className="w-64 bg-gray-100 rounded-full h-2.5 overflow-hidden border border-emerald-100">
+          <div className="w-64 bg-[#121c17] rounded-full h-2.5 overflow-hidden border border-emerald-500/20">
             <div
-              className="bg-gradient-to-r from-[#163A2D] to-emerald-500 h-full transition-all duration-300"
+              className="bg-gradient-to-r from-amber-400 to-amber-500 h-full transition-all duration-300"
               style={{ width: `${uploadProgress}%` }}
             ></div>
           </div>
         </div>
       )}
 
-      <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-emerald-100 overflow-hidden relative my-8">
-        <div className="p-6 bg-emerald-50/50 border-b border-emerald-100 flex items-center justify-between">
+      {/* Modal Container */}
+      <div className="bg-[#0d1410] rounded-3xl max-w-2xl w-full shadow-2xl border border-amber-400/30 overflow-hidden relative my-8">
+        
+        {/* Header */}
+        <div className="p-6 bg-[#121c17]/80 border-b border-emerald-900/40 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-[#163A2D] text-amber-300 rounded-xl shadow-sm">
+            <div className="p-2.5 bg-emerald-950/80 border border-emerald-500/30 text-amber-400 rounded-2xl shadow-sm">
               <Edit3 className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[#163A2D]">Edit Gallery Photo</h2>
+              <h2 className="text-lg font-extrabold text-white">Edit Gallery Photo</h2>
+              <p className="text-xs text-slate-400 font-medium">Update caption, category, or replace photo.</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-gray-400 hover:text-rose-600 rounded-xl">
+          <button onClick={onClose} className="p-2 text-slate-400 hover:text-white rounded-xl">
             <X className="w-5 h-5" />
           </button>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold uppercase text-gray-600 mb-1">Title / Caption *</label>
+              <label className="block text-xs font-bold text-slate-300 mb-1">Title / Caption *</label>
               <input
                 type="text"
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-emerald-600"
+                className="w-full px-4 py-2.5 bg-[#121c17] border border-emerald-500/20 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400/60"
                 {...register("title", { required: "Title is required" })}
               />
-              {errors.title && <p className="text-xs text-rose-500 mt-1">{errors.title.message}</p>}
+              {errors.title && <p className="text-xs text-rose-400 mt-1">{errors.title.message}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-600 mb-1">Category</label>
+              <label className="block text-xs font-bold text-slate-300 mb-1">Category</label>
               <input
                 type="text"
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-emerald-600"
+                className="w-full px-4 py-2.5 bg-[#121c17] border border-emerald-500/20 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400/60"
                 {...register("category")}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-600 mb-1">Date</label>
+              <label className="block text-xs font-bold text-slate-300 mb-1">Date</label>
               <input
                 type="text"
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-emerald-600"
+                className="w-full px-4 py-2.5 bg-[#121c17] border border-emerald-500/20 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400/60"
                 {...register("date")}
               />
             </div>
           </div>
 
+          {/* Image */}
           <div>
-            <label className="block text-xs font-bold uppercase text-gray-600 mb-1">Image Photo</label>
+            <label className="block text-xs font-bold text-slate-300 mb-1">Gallery Image</label>
             {!imagePreview ? (
-              <div className="relative border-2 border-dashed border-emerald-300 bg-gray-50 rounded-2xl p-4 text-center cursor-pointer">
+              <div className="relative border-2 border-dashed border-emerald-500/30 bg-[#121c17]/60 rounded-2xl p-4 text-center cursor-pointer">
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => e.target.files[0] && processFile(e.target.files[0])}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
-                <Upload className="w-5 h-5 text-emerald-700 mx-auto mb-1" />
-                <p className="text-xs text-gray-600 font-semibold">Click to upload new image</p>
+                <Upload className="w-5 h-5 text-amber-400 mx-auto mb-1" />
+                <p className="text-xs text-slate-300 font-semibold">Click to upload new image</p>
               </div>
             ) : (
-              <div className="relative p-3 bg-emerald-50/60 rounded-2xl border border-emerald-200 flex items-center justify-between">
+              <div className="relative p-3 bg-[#121c17]/80 rounded-2xl border border-emerald-500/30 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <img src={imagePreview} alt="Thumbnail" className="w-16 h-12 object-cover rounded-xl border border-emerald-200" />
+                  <img src={imagePreview} alt="Thumbnail" className="w-16 h-12 object-cover rounded-xl border border-emerald-500/20 bg-white/10" />
                   <div>
-                    <p className="text-xs font-bold text-[#163A2D] truncate max-w-[200px]">
+                    <p className="text-xs font-bold text-white truncate max-w-[200px]">
                       {selectedImageFile ? selectedImageFile.name : "Current Image"}
                     </p>
-                    <p className="text-[11px] text-emerald-700 font-medium">Ready to update</p>
+                    <p className="text-[10px] text-emerald-400 font-medium">Ready to update</p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => { setValue("imageFile", null); setImagePreview(null); }}
-                  className="p-1.5 text-gray-400 hover:text-rose-600 rounded-lg"
+                  className="p-1.5 text-slate-400 hover:text-rose-400 rounded-lg"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -242,28 +253,29 @@ const EditGalleryModal = ({ record, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-gray-600 mb-1">Description</label>
+            <label className="block text-xs font-bold text-slate-300 mb-1">Description</label>
             <textarea
               rows="3"
-              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-emerald-600 resize-none"
+              className="w-full px-4 py-2.5 bg-[#121c17] border border-emerald-500/20 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400/60 resize-none"
               {...register("description")}
             ></textarea>
           </div>
 
-          <div className="flex justify-end gap-3 pt-3 border-t border-gray-100">
+          {/* Actions */}
+          <div className="flex justify-end gap-3 pt-3 border-t border-emerald-900/40">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl"
+              className="px-5 py-2.5 bg-[#121c17] border border-emerald-500/30 text-slate-300 text-xs font-bold rounded-xl hover:bg-emerald-950/40 cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isUpdating}
-              className="px-6 py-2.5 bg-[#163A2D] hover:bg-[#0C2219] text-amber-300 text-xs font-bold rounded-xl flex items-center gap-2 cursor-pointer disabled:opacity-70"
+              className="px-6 py-2.5 font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 text-xs rounded-xl flex items-center gap-2 cursor-pointer disabled:opacity-70 hover:from-amber-300 hover:to-amber-400"
             >
-              {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+              {isUpdating ? <Loader2 className="w-4 h-4 animate-spin text-slate-950" /> : "Save Changes"}
             </button>
           </div>
         </form>
@@ -309,9 +321,14 @@ const AllGallery = () => {
       text: "You won't be able to revert this gallery item!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#163A2D",
+      background: "#0d1410",
+      color: "#ffffff",
+      confirmButtonColor: "#fbbf24",
       cancelButtonColor: "#f43f5e",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "<span style='color: #090e0b; font-weight: bold;'>Yes, delete it!</span>",
+      customClass: {
+        popup: "border border-amber-400/30 rounded-3xl",
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         await deleteGalleryItem(id);
@@ -321,44 +338,62 @@ const AllGallery = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <Loader2 className="w-8 h-8 text-[#163A2D] animate-spin" />
+      <div className="flex flex-col items-center justify-center min-h-[300px] space-y-3 bg-[#0d1410]/80 rounded-3xl border border-amber-400/20">
+        <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
+        <span className="text-xs font-mono text-emerald-300">Loading gallery photos...</span>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-[#163A2D]">Photo Gallery</h2>
-          <p className="text-xs text-gray-500">Manage all photos and media in your portfolio</p>
+    <div className="max-w-6xl mx-auto space-y-6 text-slate-100 font-sans">
+      
+      {/* HEADER SECTION */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0d1410]/80 p-6 rounded-3xl border border-amber-400/20 shadow-2xl backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-emerald-950/80 border border-emerald-500/30 rounded-2xl text-amber-400 shrink-0">
+            <ImageIcon className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-extrabold text-white">Photo Gallery</h2>
+              <span className="text-[10px] font-bold text-amber-300 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                <Sparkles size={11} className="text-amber-400" />
+                {galleryItems.length} Photos
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 font-mono mt-0.5">
+              Manage all photos and media items displayed in your portfolio.
+            </p>
+          </div>
         </div>
       </div>
 
+      {/* GALLERY GRID */}
       {galleryItems.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-3xl border border-dashed border-gray-200">
-          <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm font-semibold text-gray-500">No photos added in gallery yet.</p>
+        <div className="bg-[#0d1410]/80 p-12 text-center rounded-3xl border border-amber-400/20">
+          <ImageIcon className="w-12 h-12 text-emerald-500/40 mx-auto mb-3" />
+          <p className="text-sm font-extrabold text-white">No photos added in gallery yet.</p>
+          <p className="text-xs text-slate-400 mt-1">Upload your first photo to get started.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {galleryItems.map((item) => (
             <div
               key={item._id}
-              className="bg-white rounded-3xl border border-emerald-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col justify-between"
+              className="bg-[#0a110d]/90 rounded-3xl border border-emerald-900/60 shadow-2xl backdrop-blur-xl hover:border-amber-400/40 transition-all overflow-hidden flex flex-col justify-between group relative"
             >
               <div>
-                {/* Photo Card */}
+                {/* Photo Header */}
                 {item.image && (
-                  <div className="h-48 w-full bg-gray-100 overflow-hidden border-b border-gray-100 relative group">
+                  <div className="h-48 w-full bg-[#121c17] overflow-hidden border-b border-emerald-900/40 relative">
                     <img
                       src={item.image}
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {item.category && (
-                      <span className="absolute top-3 left-3 bg-[#163A2D]/80 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                      <span className="absolute top-3 left-3 bg-[#0d1410]/80 border border-amber-400/30 backdrop-blur-md text-amber-300 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
                         {item.category}
                       </span>
                     )}
@@ -366,36 +401,38 @@ const AllGallery = () => {
                 )}
 
                 <div className="p-4 space-y-2">
-                  <h3 className="text-base font-bold text-[#163A2D] leading-snug">
+                  <h3 className="text-base font-extrabold text-white group-hover:text-amber-300 transition-colors leading-snug">
                     {item.title}
                   </h3>
 
                   {item.date && (
-                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                      <Calendar className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                    <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
+                      <Calendar className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       <span>{item.date}</span>
                     </div>
                   )}
 
                   {item.description && (
-                    <p className="text-xs text-gray-500 line-clamp-2 pt-1">{item.description}</p>
+                    <p className="text-xs text-slate-400 line-clamp-2 pt-1 bg-[#121c17]/60 p-2.5 rounded-xl border border-emerald-500/10 mt-1">
+                      {item.description}
+                    </p>
                   )}
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="p-3 bg-emerald-50/30 border-t border-emerald-100 flex items-center justify-end">
+              <div className="p-3 bg-[#121c17]/80 border-t border-emerald-900/40 flex items-center justify-end">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedGalleryItem(item)}
-                    className="p-2 text-gray-600 hover:text-[#163A2D] bg-white hover:bg-emerald-100 rounded-xl transition-all shadow-sm"
+                    className="p-2 rounded-xl border border-emerald-500/30 bg-emerald-950/60 hover:bg-emerald-900/80 text-amber-300 transition-all cursor-pointer"
                     title="Edit Item"
                   >
                     <Edit3 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(item._id)}
-                    className="p-2 text-rose-500 hover:text-rose-700 bg-white hover:bg-rose-50 rounded-xl transition-all shadow-sm"
+                    className="p-2 rounded-xl border border-rose-500/30 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 transition-all cursor-pointer"
                     title="Delete Item"
                   >
                     <Trash2 className="w-4 h-4" />
