@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -21,7 +22,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
   const queryClient = useQueryClient();
   const { logout } = useAuth();
 
-  // Router configuration paths exact sync kora hoyeche
+  // Router configuration paths
   const navItems = [
     { id: "users", label: "Users", icon: Users, path: "/admin/all-users" },
     
@@ -77,27 +78,29 @@ const Navbar = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      {/* MOBILE OVERLAY */}
+      {/* MOBILE BACKDROP OVERLAY */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-[#090e0b]/80 backdrop-blur-md z-40 lg:hidden transition-opacity duration-300"
         />
       )}
 
-      {/* SIDE NAVIGATION */}
+      {/* SIDE NAVIGATION WRAPPER */}
       <aside
         className={`
           fixed z-50 transition-all duration-300 ease-in-out
-          top-20 right-4 left-4 flex flex-col p-3
-          bg-white/90 backdrop-blur-2xl border border-emerald-100/90 rounded-3xl shadow-2xl shadow-emerald-950/10 gap-1.5 
-          max-h-[75vh] overflow-y-auto
+          top-20 right-4 left-4 flex flex-col p-2.5 sm:p-3
+          bg-[#0d1410]/95 backdrop-blur-2xl rounded-3xl shadow-2xl gap-1
+          max-h-[78vh] overflow-y-auto
 
           /* LARGE SCREEN ADJUSTMENTS */
-          lg:left-auto lg:top-1/2 lg:-translate-y-1/2 lg:right-4 lg:w-auto lg:items-end lg:gap-1.5 lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none 
-          lg:max-h-[calc(100vh-2rem)] lg:pr-1 lg:py-2
-          
-          [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+          lg:left-auto lg:top-1/2 lg:-translate-y-1/2 lg:right-3 lg:w-auto lg:items-end lg:gap-1 lg:bg-[#0d1410]/80 lg:p-2 lg:shadow-2xl lg:backdrop-blur-xl
+          lg:max-h-[calc(100vh-6rem)] lg:pr-2 lg:py-2.5
+
+          /* Scrollbar Customizations */
+          [scrollbar-width:thin] [scrollbar-color:#f59e0b22_transparent]
+          [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-amber-400/20 [&::-webkit-scrollbar-thumb]:rounded-full
 
           ${
             isOpen
@@ -120,23 +123,23 @@ const Navbar = ({ isOpen, setIsOpen }) => {
 
                 ${
                   isActive
-                    ? `bg-gradient-to-r from-emerald-800 to-[#163A2D] text-amber-300 font-semibold px-3.5 py-2 lg:py-2 lg:px-3.5 rounded-2xl border border-emerald-700/50 shadow-lg shadow-emerald-900/20 justify-start lg:justify-center`
-                    : `text-slate-700 hover:text-emerald-900 hover:bg-emerald-50/80 p-2.5 lg:p-2 lg:px-3 rounded-2xl lg:bg-white/80 lg:border lg:border-slate-200/80 lg:backdrop-blur-xl lg:shadow-sm justify-start lg:justify-center`
+                    ? `bg-gradient-to-r from-emerald-900 to-[#0d1410] text-amber-300 font-bold px-3 py-1.5 lg:py-1.5 lg:px-2.5 rounded-xl shadow-md shadow-emerald-950/40 justify-start lg:justify-center`
+                    : `text-slate-300 hover:text-white hover:bg-emerald-950/60 p-2 lg:p-1.5 lg:px-2.5 rounded-xl lg:bg-[#121c17]/60 lg:backdrop-blur-md justify-start lg:justify-center`
                 }
               `}
             >
               {({ isActive }) => (
                 <>
                   <Icon
-                    className={`w-4 h-4 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px] shrink-0 transition-colors duration-200 ${
-                      isActive ? "text-amber-400 stroke-[2.5]" : "text-slate-600 group-hover:text-emerald-700 stroke-2"
+                    className={`w-4 h-4 shrink-0 transition-colors duration-200 ${
+                      isActive ? "text-amber-400 stroke-[2.5]" : "text-emerald-400/80 group-hover:text-amber-300 stroke-2"
                     }`}
                   />
 
                   {/* Responsive Label */}
                   <span
-                    className={`ml-3 text-sm whitespace-nowrap tracking-wide font-medium ${
-                      isActive ? "inline-block text-amber-300 font-bold" : "inline-block lg:hidden text-slate-800"
+                    className={`ml-2.5 text-xs whitespace-nowrap tracking-wide font-medium ${
+                      isActive ? "inline-block text-amber-300 font-extrabold" : "inline-block lg:hidden text-slate-200"
                     }`}
                   >
                     {item.label}
@@ -144,7 +147,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
 
                   {/* Desktop Hover Tooltip */}
                   {!isActive && (
-                    <span className="hidden lg:block absolute right-12 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none bg-[#163A2D] text-amber-300 text-xs py-1.5 px-3 rounded-xl border border-emerald-700/50 whitespace-nowrap shadow-xl font-medium">
+                    <span className="hidden lg:block absolute right-11 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none bg-[#0d1410] text-amber-300 text-[11px] font-bold py-1 px-2.5 rounded-lg whitespace-nowrap shadow-2xl">
                       {item.label}
                     </span>
                   )}
@@ -157,15 +160,15 @@ const Navbar = ({ isOpen, setIsOpen }) => {
         {/* LOGOUT BUTTON */}
         <button
           onClick={onLogoutClick}
-          className="group relative flex items-center transition-all duration-200 ease-in-out w-full lg:w-auto p-2.5 lg:p-2 lg:px-3 rounded-2xl text-rose-600 hover:text-rose-700 hover:bg-rose-50/80 lg:bg-white/80 lg:border lg:border-slate-200/80 lg:backdrop-blur-xl lg:shadow-sm justify-start lg:justify-center cursor-pointer mt-1"
+          className="group relative flex items-center transition-all duration-200 ease-in-out w-full lg:w-auto p-2 lg:p-1.5 lg:px-2.5 rounded-xl text-rose-400 hover:text-rose-200 hover:bg-rose-950/40 lg:bg-[#121c17]/60 lg:backdrop-blur-md justify-start lg:justify-center cursor-pointer mt-1"
         >
-          <LogOut className="w-4 h-4 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px] shrink-0 text-rose-500 stroke-2 group-hover:text-rose-600 transition-colors" />
+          <LogOut className="w-4 h-4 shrink-0 text-rose-400 stroke-2 group-hover:text-rose-300 transition-colors" />
 
-          <span className="ml-3 text-sm whitespace-nowrap tracking-wide font-bold text-rose-600 inline-block lg:hidden">
+          <span className="ml-2.5 text-xs whitespace-nowrap tracking-wide font-bold text-rose-400 inline-block lg:hidden">
             Logout
           </span>
 
-          <span className="hidden lg:block absolute right-12 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none bg-rose-950 text-rose-200 text-xs py-1.5 px-3 rounded-xl border border-rose-800/50 whitespace-nowrap shadow-xl font-semibold">
+          <span className="hidden lg:block absolute right-11 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none bg-rose-950 text-rose-200 text-[11px] font-extrabold py-1 px-2.5 rounded-lg whitespace-nowrap shadow-2xl">
             Logout
           </span>
         </button>

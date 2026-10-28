@@ -10,7 +10,8 @@ import {
   Loader2,
   Calendar,
   Mail,
-  Fingerprint
+  Fingerprint,
+  Sparkles
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -31,10 +32,9 @@ const AllUsers = () => {
     },
   });
 
-  // 2. UPDATE ROLE MUTATION (Apnar backend route: PATCH /users/:id/role)
+  // 2. UPDATE ROLE MUTATION (Backend Endpoint: PATCH /users/:id/role)
   const updateRoleMutation = useMutation({
     mutationFn: async ({ id, role }) => {
-      // Backend Endpoint Matching: /users/:id/role
       const res = await axiosSecure.patch(`/users/${id}/role`, { role });
       return res.data;
     },
@@ -65,7 +65,6 @@ const AllUsers = () => {
 
   // Role Change Handler
   const handleRoleChange = (user, newRole) => {
-    // Mongo DB _id ache kina dekhe neya
     const mongoId = user._id;
 
     if (!mongoId) {
@@ -100,17 +99,24 @@ const AllUsers = () => {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-slate-100 font-sans">
+      
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/80 p-6 rounded-3xl border border-slate-200/80 shadow-sm backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0d1410]/80 p-6 rounded-3xl border border-amber-400/20 shadow-2xl backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-emerald-100 rounded-2xl text-emerald-800">
+          <div className="p-3 bg-emerald-950/80 border border-emerald-500/30 rounded-2xl text-amber-400 shrink-0">
             <UsersIcon className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 font-serif">User Management</h1>
-            <p className="text-xs text-slate-500 font-mono">
-              Manage all system accounts, update roles & permissions.
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-extrabold text-white">User Management</h1>
+              <span className="text-[10px] font-bold text-amber-300 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                <Sparkles size={11} className="text-amber-400" />
+                Access Control
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 font-mono mt-0.5">
+              Manage all system accounts, update roles & permissions in real-time.
             </p>
           </div>
         </div>
@@ -118,6 +124,7 @@ const AllUsers = () => {
 
       {/* Filter & Search Controls */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        
         {/* Search Bar */}
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -126,20 +133,20 @@ const AllUsers = () => {
             placeholder="Search by name, email, or UID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white/80 border border-slate-200/80 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-xs"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#121c17]/80 border border-emerald-500/20 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400/60 transition-all shadow-inner"
           />
         </div>
 
         {/* Role Filter Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-200/60 rounded-2xl w-full sm:w-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-[#121c17]/90 border border-emerald-500/20 rounded-2xl w-full sm:w-auto">
           {["all", "admin", "user"].map((role) => (
             <button
               key={role}
               onClick={() => setFilterRole(role)}
-              className={`flex-1 sm:flex-none px-4 py-1.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none px-4 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer ${
                 filterRole === role
-                  ? "bg-white text-emerald-900 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20"
+                  : "text-slate-400 hover:text-white hover:bg-emerald-950/40"
               }`}
             >
               {role}
@@ -149,24 +156,26 @@ const AllUsers = () => {
       </div>
 
       {/* Users Data Table */}
-      <div className="bg-white/80 border border-slate-200/90 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/50 backdrop-blur-xl">
+      <div className="bg-[#0d1410]/80 border border-amber-400/20 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center p-12 gap-3 text-slate-500">
-            <Loader2 className="w-8 h-8 animate-spin text-emerald-700" />
-            <span className="text-xs font-mono">Loading users data...</span>
+          <div className="flex flex-col items-center justify-center p-12 gap-3 text-slate-400">
+            <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+            <span className="text-xs font-mono text-emerald-300">Loading users data...</span>
           </div>
         ) : isError ? (
-          <div className="p-8 text-center text-rose-600 text-xs font-mono">
+          <div className="p-8 text-center text-rose-400 text-xs font-mono">
             Failed to load users data from server.
           </div>
         ) : filteredUsers.length === 0 ? (
-          <div className="p-12 text-center text-slate-500 text-xs font-mono">
+          <div className="p-12 text-center text-slate-400 text-xs font-mono">
             No users found matching your criteria.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 border-b border-slate-200/80 text-slate-600 uppercase font-mono text-[11px] tracking-wider">
+              
+              {/* Table Header */}
+              <thead className="bg-[#121c17]/90 border-b border-emerald-900/40 text-emerald-300 uppercase font-mono text-[11px] tracking-wider">
                 <tr>
                   <th className="px-6 py-4">User Info</th>
                   <th className="px-6 py-4">UID</th>
@@ -175,19 +184,22 @@ const AllUsers = () => {
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-sans">
+
+              {/* Table Body */}
+              <tbody className="divide-y divide-emerald-900/30 font-sans">
                 {filteredUsers.map((u) => (
-                  <tr key={u._id || u.uid} className="hover:bg-slate-50/60 transition-colors">
+                  <tr key={u._id || u.uid} className="hover:bg-emerald-950/30 transition-colors">
+                    
                     {/* Name & Email */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-700 to-[#163A2D] text-amber-300 font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-950/80 border border-emerald-500/30 text-amber-400 font-extrabold flex items-center justify-center text-sm shadow-md shrink-0">
                           {u.name ? u.name.charAt(0).toUpperCase() : "U"}
                         </div>
                         <div className="flex flex-col min-w-0">
-                          <span className="font-semibold text-slate-900 truncate">{u.name || "N/A"}</span>
-                          <span className="text-slate-500 text-[11px] flex items-center gap-1 truncate">
-                            <Mail className="w-3 h-3 text-slate-400 shrink-0" />
+                          <span className="font-bold text-white truncate">{u.name || "N/A"}</span>
+                          <span className="text-slate-400 text-[11px] flex items-center gap-1.5 truncate mt-0.5">
+                            <Mail className="w-3 h-3 text-amber-400 shrink-0" />
                             {u.email}
                           </span>
                         </div>
@@ -195,9 +207,9 @@ const AllUsers = () => {
                     </td>
 
                     {/* UID */}
-                    <td className="px-6 py-4 font-mono text-slate-600">
-                      <div className="flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-lg w-fit border border-slate-200/60 text-[11px]">
-                        <Fingerprint className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <td className="px-6 py-4 font-mono text-slate-300">
+                      <div className="flex items-center gap-1.5 bg-[#121c17]/80 px-2.5 py-1 rounded-lg w-fit border border-emerald-500/20 text-[11px]">
+                        <Fingerprint className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                         <span className="truncate max-w-[120px]">{u.uid}</span>
                       </div>
                     </td>
@@ -206,31 +218,31 @@ const AllUsers = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         {u.role === "admin" ? (
-                          <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0" />
+                          <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
                         ) : (
-                          <User className="w-4 h-4 text-slate-500 shrink-0" />
+                          <User className="w-4 h-4 text-emerald-400 shrink-0" />
                         )}
                         
                         <select
                           value={u.role || "user"}
                           disabled={updateRoleMutation.isPending}
                           onChange={(e) => handleRoleChange(u, e.target.value)}
-                          className={`px-3 py-1.5 rounded-xl font-semibold text-xs border cursor-pointer focus:outline-none transition-all ${
+                          className={`px-3 py-1.5 rounded-xl font-bold text-xs border cursor-pointer focus:outline-none transition-all ${
                             u.role === "admin"
-                              ? "bg-amber-50 text-amber-900 border-amber-300 focus:border-amber-500"
-                              : "bg-slate-100 text-slate-700 border-slate-200 focus:border-emerald-500"
+                              ? "bg-amber-400 text-slate-950 border-amber-400 focus:border-amber-300"
+                              : "bg-[#121c17]/90 text-slate-200 border-emerald-500/30 focus:border-amber-400/60"
                           }`}
                         >
-                          <option value="user">User</option>
-                          <option value="admin">Admin</option>
+                          <option value="user" className="bg-[#0d1410] text-white">User</option>
+                          <option value="admin" className="bg-[#0d1410] text-amber-300 font-bold">Admin</option>
                         </select>
                       </div>
                     </td>
 
                     {/* Created Date */}
-                    <td className="px-6 py-4 text-slate-500 font-mono text-[11px]">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <td className="px-6 py-4 text-slate-400 font-mono text-[11px]">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                         {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "N/A"}
                       </div>
                     </td>
@@ -239,7 +251,7 @@ const AllUsers = () => {
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => handleDelete(u._id || u.uid, u.name)}
-                        className="p-2 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-rose-600 transition-all cursor-pointer shadow-xs"
+                        className="p-2 rounded-xl border border-rose-500/30 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 hover:text-rose-100 transition-all cursor-pointer shadow-md"
                         title="Delete User"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -252,6 +264,7 @@ const AllUsers = () => {
           </div>
         )}
       </div>
+
     </div>
   );
 };
